@@ -2,15 +2,36 @@
   "name": "login_app_server",
   "version": "1.0.0",
   "description": "This server for login app",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon server.js"
   },
   "author": "Praful Patekar",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongodb-memory-server": "^9.1.3",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-uuid": "^1.4.8",
     "nodemon": "^3.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Prafulpatekar/MERN_Login_APP.git#b8082a92c87ab53af2191a23f1e6a6e805986e89"
+  },
+  "keywords": [
+    "Login",
+    "App",
+    "Server"
+  ],
+  "bugs": {
+    "url": "https://github.com/Prafulpatekar/MERN_Login_APP/issues"
+  },
+  "homepage": "https://github.com/Prafulpatekar/MERN_Login_APP/tree/b8082a92c87ab53af2191a23f1e6a6e805986e89#readme"
 }
