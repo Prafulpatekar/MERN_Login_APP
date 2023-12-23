@@ -1,13 +1,13 @@
 import React from 'react';
-import { Toaster } from 'react-hot-toast';
 
 import styles from '../styles/Login.module.css';
+import CustomToast from './CustomToast';
 
 export default function Recovery() {
 
   return (
     <div className="container mx-auto">
-        <Toaster position='top-center' reverseOrder={false}></Toaster>
+        <CustomToast></CustomToast>
         <div className="flex justify-center items-center h-screen">
             <div className={styles.glass}>
 
