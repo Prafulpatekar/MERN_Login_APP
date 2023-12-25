@@ -1,35 +1,23 @@
 import { Router } from "express";
+import AuthController from "../controllers/auth.js";
+import { localVariables, validateUser } from "../middleware/auth.js";
 
 const router = Router();
+const authController = new AuthController();
 
 // POST METHODS
 
-// Use to authenticate user
-router.route('/').post((req,res)=>{
-    res.json('Auth Route');
-});
-
-router.route('/login').post((req,res)=>{
-    res.json('Login Route')
-});
+router.route('/login').post(authController.login);
 
 // GET METHODS
-router.route('/generateOTP').get((req,res)=>{
-    res.json('Get OTP Route')
-});
+router.get('/generateOTP',validateUser,localVariables,authController.generateOTP);
 
-router.route('/verifyOTP').get((req,res)=>{
-    res.json('Get verify OTP')
-});
+router.get('/verifyOTP',validateUser,authController.verifyOTP);
 
-router.route('/createResetSession').get((req,res)=>{
-    res.json('Get Reset Session')
-});
+router.get('/createResetSession',authController.createResetSession);
 
 // PUT METHODS
-router.route('/resetPassword').put((req,res)=>{
-    res.json('Reset Password Route');
-});
+router.put('/resetPassword',authController.resetPassword);
 
 
 export default router;
