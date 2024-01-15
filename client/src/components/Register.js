@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import avatar from '../assets/profile.png';
 import { useFormik } from 'formik';
 import { registerValidation } from '../helper/validate';
@@ -7,9 +7,12 @@ import { convertBase64 } from '../helper/convert';
 
 import styles from '../styles/Login.module.css';
 import CustomToast from './CustomToast';
+import { registerUser } from '../helper/apiRequest';
+import toast from 'react-hot-toast';
 
 export default function Register() {
 
+  const navigate = useNavigate();
   const [file,setFile] = useState();
 
   const formik = useFormik({
@@ -23,7 +26,13 @@ export default function Register() {
     validateOnChange: false,
     onSubmit: async values =>{
       values = await Object.assign(values, {profile : file || ''})
-        console.log(values)
+      let registerPromise = registerUser(values);
+      toast.promise(registerPromise,{
+        loading: "Creating...!",
+        success: <b>Register successfully...!</b>,
+        error: <b>Could not register...!</b>
+      })
+      registerPromise.then(()=>{navigate("/")})
     }
   })
 

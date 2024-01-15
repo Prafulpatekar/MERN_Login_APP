@@ -1,14 +1,29 @@
 import toast from "react-hot-toast";
+import { authenticate, verifyPassword } from "./apiRequest";
 
 /** Validate login page usernmae**/
-export const usernameValidate =(values)=>{
+export const usernameValidate = async (values)=>{
     const errors = usernameVerify({},values);
+    if(values.username){
+        // check user exist or not
+        const {status } = await authenticate(values.username);
+        if(status !== 200){
+            errors.exist = toast.error("User does not exist...!")
+        }
+    }
 
     return errors;
 }
 /** Validate password**/
-export const passwordValidate =(values)=>{
+export const passwordValidate = async (values)=>{
     const errors = passwordVerify({},values);
+    if(values.password){
+        // check password
+        const response = await verifyPassword({username:values.username,password:values.password});
+        if(response.status !== 200){
+            errors.exist = toast.error(response.error)
+        }
+    }
 
     return errors;
 }
