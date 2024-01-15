@@ -13,6 +13,14 @@ export async function verifyUser(req, res, next){
       // check the user existance
       let exist = await UserModel.findOne({ username });
       if(!exist) return res.status(404).send({ error : "Can't find User!"});
+<<<<<<< HEAD
+=======
+      req.user = {
+        id: exist.id,
+        username: exist.username,
+        email: exist.email
+      }
+>>>>>>> 8a86a9b7a57e33e95e2e34e42e1cb6041b142db6
       next();
 
   } catch (error) {
@@ -76,7 +84,11 @@ export default class AuthController{
           message: `Hi ${req.user?.username}, \nThe OTP ${req.app.locals.OTP} for recovery email ${req.user.email} for your account.`
         })
         if(sender?.status){
+<<<<<<< HEAD
           return res.status(200).send({msg:"OTP Generated successfully",otp:req.app.locals.OTP});
+=======
+          return res.status(200).send({msg:"OTP Generated successfully"});
+>>>>>>> 8a86a9b7a57e33e95e2e34e42e1cb6041b142db6
         }else{
           return res.status(500).send({err:"Unable to send OTP"});
 
@@ -104,8 +116,7 @@ export default class AuthController{
 
     async createResetSession(req,res){
       if(req.app.locals.resetSession){
-        req.app.locals.resetSession = false; // allow access to this route only once
-        return res.status(200).send({msg:"Access granted!"});
+        return res.status(200).send({ flag : req.app.locals.resetSession})
       };
       return res.status(440).send({msg:"Session expired!"});
     }
@@ -114,7 +125,7 @@ export default class AuthController{
       try{
         let msg;
         if(!req.app.locals.resetSession){
-          return res.status(403).send({error:"Session expired"});
+          return res.status(440).send({error:"Session expired"});
         }
         const { username, password } = req.body;
         const user = await UserModel.findOne({username},{_id:0,__v:0,password:0});
