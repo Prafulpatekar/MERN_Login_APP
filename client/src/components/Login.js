@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import avatar from '../assets/profile.png';
 import { useFormik } from 'formik';
 import {usernameValidate} from '../helper/validate';
 
 import styles from '../styles/Login.module.css';
 import CustomToast from './CustomToast';
+import { useAuthStore } from '../store/store';
 
 export default function Login() {
+  
+  const navigate = useNavigate();
+  const setUsername = useAuthStore(state => state.setUsername);
 
   const formik = useFormik({
     initialValues: {
@@ -17,7 +21,9 @@ export default function Login() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values =>{
-        console.log(values)
+        setUsername(values.username);
+        navigate('/password');
+        
     }
   })
 
@@ -29,9 +35,9 @@ export default function Login() {
 
                 <div className="title text-left">
                     <h4 className="text-5xl font-bold">Hello World!</h4>
-                    <spna className="py-4 text-xl w-2/3 text-center text-gray-500">
+                    <span className="py-4 text-xl w-2/3 text-center text-gray-500">
                         Explore More by connecting with us.
-                    </spna>
+                    </span>
                 </div>
 
                 <form className="py-1" onSubmit={formik.handleSubmit}>

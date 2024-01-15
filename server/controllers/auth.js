@@ -1,7 +1,24 @@
 import { accessTokenGenrator } from "../helper/auth.js";
 import {  passwordEncryption, passwordValidation } from "../helper/common.js";
+import { sendEmail } from "../helper/email.js";
 import UserModel from '../models/User.model.js'
 import otpGenerator from 'otp-generator';
+
+/** middleware for verify user */
+export async function verifyUser(req, res, next){
+  try {
+      
+      const { username } = req.method == "GET" ? req.query : req.body;
+
+      // check the user existance
+      let exist = await UserModel.findOne({ username });
+      if(!exist) return res.status(404).send({ error : "Can't find User!"});
+      next();
+
+  } catch (error) {
+      return res.status(404).send({ error: "Authentication Error"});
+  }
+}
 
 // Authenticate related logic
 export default class AuthController{
@@ -53,7 +70,17 @@ export default class AuthController{
 
         const OTP = await otpGenerator.generate(6,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false});
         req.app.locals.OTP = OTP;
-        return res.status(200).send({msg:"OTP Generated successfully",otp:req.app.locals.OTP});
+        const sender = await sendEmail({
+          to: req.user.email,
+          subject: "Recovery password verfied from prafulpatekar.dev",
+          message: `Hi ${req.user?.username}, \nThe OTP ${req.app.locals.OTP} for recovery email ${req.user.email} for your account.`
+        })
+        if(sender?.status){
+          return res.status(200).send({msg:"OTP Generated successfully",otp:req.app.locals.OTP});
+        }else{
+          return res.status(500).send({err:"Unable to send OTP"});
+
+        }
       }catch(error){
         return res.status(500).send({error:error?.message});
       }
@@ -62,7 +89,7 @@ export default class AuthController{
 
     async verifyOTP(req,res){
       try{
-        const { OTP } = req.query;
+        const { OTP } = req.body;
         if(Number(OTP) === Number(req.app.locals.OTP)){
           req.app.locals.OTP = null;
           req.app.locals.resetSession = true;

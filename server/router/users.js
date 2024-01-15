@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserController from "../controllers/users.js";
 import { validateUser } from "../middleware/auth.js";
+import { verifyUser } from "../controllers/auth.js";
 
 const router = Router();
 
@@ -17,12 +18,12 @@ router.post('/registerMail',userController.registerMail);
 // GET METHODS
 
 // use to get user details
-router.get('/:username',validateUser,userController.getUser);
+router.get('/:username',userController.getUser);
 
 // PUT METHODS
 
 // use to update user details
-router.get('/:id',validateUser,userController.updateUser);
+router.put('/',validateUser,userController.updateUser);
 
 
 

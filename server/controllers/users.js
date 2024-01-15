@@ -1,4 +1,5 @@
 import { passwordEncryption } from '../helper/common.js';
+import { sendEmail } from '../helper/email.js';
 import UserModel from '../models/User.model.js'
 
 // user related logic
@@ -80,12 +81,30 @@ export default class UserController{
         "password": ""
     }
     */
-    async registerMail(data){
-        return {
-			status: true,
-			message: 'Need to be implemented',
-			data: {},
-		};
+    async registerMail(req,res){
+        try {
+            const { to , subject, message} = req.body;
+            if(!to) return res.status(400).send({
+                error: "Invalid email!"
+            });
+
+            if(!subject) return res.status(400).send({
+                error: "Invalid subject!"
+            });
+
+            if(!message) return res.status(400).send({
+                error: "Invalid message!"
+            });
+
+            const response = await sendEmail({to,subject,message});
+            if(response.status){
+                return res.status(200).send({msg:"Email send successfully!"})
+            }
+            return res.status(403).send({error:response.msg});
+
+        } catch (error) {
+            return res.status(500).send({error:error?.message});
+        }
     }
 
     async getUser(req,res){
@@ -115,7 +134,8 @@ export default class UserController{
 
         try{
             let msg;
-            const { id } = req.params;
+            const { id } = req?.user;
+            console.log("id",id,req.user)
             const body = req.body;
 
             if(!id) return res.status(400).send({error:"Please provide valid user id!"});

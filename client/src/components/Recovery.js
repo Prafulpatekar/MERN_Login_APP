@@ -13,9 +13,9 @@ export default function Recovery() {
 
                 <div className="title text-center">
                     <h4 className="text-5xl font-bold">Recovery</h4>
-                    <spna className="py-4 text-xl w-2/3 text-center text-gray-500">
+                    <span className="py-4 text-xl w-2/3 text-center text-gray-500">
                         Enter OTP to recover password.
-                    </spna>
+                    </span>
                 </div>
 
                 <form className="pt-20" >
