@@ -29,11 +29,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/recovery',
-        element: <ProtectRoute><Recovery/></ProtectRoute>
+        element: <Recovery></Recovery>
     },
     {
         path: '/reset',
-        element: <ProtectRoute><Reset/></ProtectRoute>
+        element: <Reset></Reset>
     },
     {
         path: '/profile',
