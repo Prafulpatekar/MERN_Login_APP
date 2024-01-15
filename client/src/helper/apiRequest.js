@@ -86,7 +86,7 @@ export const updateUser = async (payload) => {
 export const generateOTP = async (username)=>{
     try {
         
-        const {data:{code}} = await axios.get(`/api/v1/auth/generateOTP`,{username});
+        const {data:{code}} = await axios.post(`/api/v1/auth/generateOTP`,{username});
         return Promise.resolve({code})
 
     } catch (error) {
@@ -97,7 +97,7 @@ export const generateOTP = async (username)=>{
 /** verify OTP */
 export async function verifyOTP({ username, code }){
     try {
-       const { data, status } = await axios.post('/api/v1/auth/verifyOTP', { username, OTP:code })
+       const { data, status } = await axios.post('/api/v1/auth/verifyOTP', { username, OTP:code });
        return { data, status }
     } catch (error) {
         return Promise.reject(error);
