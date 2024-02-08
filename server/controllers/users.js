@@ -135,7 +135,6 @@ export default class UserController{
         try{
             let msg;
             const { id } = req?.user;
-            console.log("id",id,req.user)
             const body = req.body;
 
             if(!id) return res.status(400).send({error:"Please provide valid user id!"});
