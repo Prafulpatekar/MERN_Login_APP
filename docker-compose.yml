@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongodb-app:
+    image: mongo:latest
+    container_name: mongodb-app
+    ports:
+      - "27019:27017"  # Expose MongoDB port
+    volumes:
+      - mongodb_data:/data/db  # Persist MongoDB data
+    networks:
+      - login-app
+  
+  client-app:
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+      args:
+        PORT: 3001  # Default port for client app
+    container_name: client-app
+    ports:
+      - "3001:3001"  # Expose the same port as defined in the Dockerfile
+    volumes:
+      - ./client:/app/client  # Mount client code into the container
+    environment:
+      - PORT=3001  # Pass the PORT environment variable to the container
+    networks:
+      - login-app
+
+  server-app:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+      args:
+        PORT: 8090  # Default port for server app
+    container_name: server-app
+    ports:
+      - "8090:8090"  # Expose the same port as defined in the Dockerfile
+    volumes:
+      - ./server:/app/server  # Mount server code into the container
+    environment:
+      - PORT=8090  # Pass the PORT environment variable to the container
+    networks:
+      - login-app
+
+  
+
+volumes:
+  mongodb_data:
+
+networks:
+  login-app:
+    external: true
+
